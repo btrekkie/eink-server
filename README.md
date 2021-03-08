@@ -14,6 +14,9 @@ Inkplate device:
   a faster CPU, non-volatile memory, etc.
 * Code changes can be made remotely, without connecting the Inkplate to a PC and
   uploading new software.
+* Code changes can be tested locally, without waiting a couple of minutes for
+  the new software to be compiled and uploaded to the e-ink device. This makes
+  the development process faster.
 * Programming the content is arguably easier, because it is in Python, which is
   a higher-level language than C++.
 
@@ -25,7 +28,7 @@ Inkplate device:
 * Some flexibility is sacrificed.
 
 A server is implemented by subclassing the `Server` class. The base class
-declares a `render()` method, which is overriden to return an image indicating
+declares a `render()` method, which is overridden to return an image indicating
 the content to display. Images are represented as Pillow library `Image`
 objects. `Servers` also have methods indicating how often the content should be
 updated. This informs the Inkplate device how often to query the server.
