@@ -23,8 +23,9 @@ Inkplate device:
 **Cons:**
 
 * Some setup is required.
-* Displaying a clock is problematic.
+* A server PC must be up and running in order to make content updates.
 * We cannot respond to touchpad or other Inkplate inputs.
+* Displaying a clock is problematic.
 * Some flexibility is sacrificed.
 
 A server is implemented by subclassing the `Server` class. The base class
