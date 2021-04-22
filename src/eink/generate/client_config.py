@@ -42,9 +42,9 @@ class ClientConfig:
         """Add the specified Wi-Fi network to the list of networks.
 
         Add the specified Wi-Fi network to the list of networks the
-        client may connect to. Networks from earlier calls to
-        ``add_wi_fi_network`` are connected to in preference to networks
-        from later calls.
+        client may connect to. The SSID must be visible. Networks from
+        earlier calls to ``add_wi_fi_network`` are connected to in
+        preference to networks from later calls.
 
         Arguments:
             ssid (str): The network's SSID.

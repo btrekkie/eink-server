@@ -210,6 +210,7 @@ bool makeWiFiRequest(
     }
 
     HTTPClient http;
+    http.setTimeout(30000);
     if (!http.begin(transport->url)) {
         return false;
     }
