@@ -15,6 +15,10 @@
 // Wi-Fi network
 static const long long WI_FI_CONNECT_TIMEOUT_US = 20 * 1000000LL;
 
+// The maximum number of microseconds to spend in a read operation when reading
+// an HTTP response before giving up
+static const long long WI_FI_READ_TIMEOUT_US = 5 * 1000000LL;
+
 // The threshold for turning off the Wi-Fi hardware. If we will not make a web
 // request for at least WI_FI_OFF_TIME_DS tenths of a second, then we turn it
 // off to save energy.
@@ -187,19 +191,24 @@ static bool connectToWiFi() {
  * WiFiClient. "context" is a pointer to the WiFiClient.
  */
 static int readWiFi(void* data, int length, void* context) {
+    long long startTime = esp_timer_get_time();
     WiFiClient* wiFi = (WiFiClient*)context;
     int offset = 0;
-    while (offset < length) {
+    while (offset < length &&
+            esp_timer_get_time() - startTime < WI_FI_READ_TIMEOUT_US) {
         int read = wiFi->read((uint8_t*)(data + offset), length - offset);
-        if (read < 0) {
+        if (read > 0) {
+            offset += read;
+        } else if (read < 0) {
             return offset;
+        } else {
+            delay(20);
         }
-        offset += read;
         if (!wiFi->connected()) {
             return offset;
         }
     }
-    return length;
+    return offset;
 }
 
 bool makeWiFiRequest(
