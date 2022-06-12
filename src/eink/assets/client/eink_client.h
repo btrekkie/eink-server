@@ -9,14 +9,14 @@
 /**
  * Implementation of Arduino's setup() function.
  * @param state The ClientState for the program.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  */
 void clientSetup(ClientState* state, Inkplate* display);
 
 /**
  * Implementation of Arduino's loop() function.
  * @param state The ClientState for the program.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  */
 void clientLoop(ClientState* state, Inkplate* display);
 

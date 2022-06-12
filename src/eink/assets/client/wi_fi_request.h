@@ -17,7 +17,7 @@ typedef struct {
  * Requests updated content from the specified server. If successful, applies
  * the results to the ClientState and display.
  * @param state The client state.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  * @param payload The request payload.
  * @param transport The server.
  * @return Whether the update was successful.

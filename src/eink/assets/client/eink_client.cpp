@@ -253,7 +253,7 @@ static long long handleMeasuredElapsedTime(
  * state->screensaverTimeDs, or state->checkBatteryTimer is 0. This sets those
  * fields to their new values if they were 0.
  * @param state The client state.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  */
 static void execEvents(ClientState* state, Inkplate* display) {
     if (state->checkBatteryTimer <= 0) {

@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from ..image import EinkGraphics
+from ..image import Palette
 from ..image.image_data import ImageData
 from .request import Request
 from .response import Response
@@ -17,8 +18,8 @@ class Server:
     ``screensaver_time()``, and ``render()``.
     """
 
-    # The maximum allowed return value for ``update_time()``,
-    # ``screensaver_time()``, and ``retry_times()``: 365 days.
+    # The maximum allowed return value for update_time(), screensaver_time(),
+    # and retry_times(): 365 days.
     MAX_TIME = timedelta(days=365)
 
     # The maximum value that can be stored in a signed 32-bit integer. This is
@@ -26,8 +27,8 @@ class Server:
     _INT_MAX = 2 ** 31 - 1
 
     # The maximum number of request times. This is the maximum number of
-    # elements in the C++ field ``ClientState.requestTimesDs``. See the
-    # comments for that field.
+    # elements in the C++ field ClientState.requestTimesDs. See the comments
+    # for that field.
     _MAX_REQUEST_TIMES = 20
 
     def update_time(self):
@@ -66,8 +67,8 @@ class Server:
         This is the (updated) content that we wish to show. The image
         must have the same size as the display, after rotation (as in
         ``ClientConfig.set_rotation``). It may not have an alpha
-        channel. We automatically convert it to a 3-bit grayscale image
-        using ``EinkGraphics.round``.
+        channel. We automatically reduce it to the device's color
+        palette (i.e. ``palette()``) using ``EinkGraphics.round``.
         """
         raise NotImplementedError('Subclasses must implement')
 
@@ -119,6 +120,14 @@ class Server:
         """
         return 'connecting'
 
+    def palette(self):
+        """Return the ``Palette`` to use.
+
+        The default is ``Palette.THREE_BIT_GRAYSCALE``. This must return
+        a palette that the e-ink device supports.
+        """
+        return Palette.THREE_BIT_GRAYSCALE
+
     def exec(self, payload):
         """Execute a server request.
 
@@ -148,7 +157,8 @@ class Server:
             raise ValueError(
                 'Server.render() may not return an image with an alpha '
                 'channel')
-        image_data = ImageData.render_png(EinkGraphics.round(image))
+        image_data = ImageData.render_png(
+            EinkGraphics.round(image, self.palette()), self.palette())
         response = Response(
             image_data, request_times_ds, screensaver_id, screensaver_time_ds)
         return response.to_bytes()

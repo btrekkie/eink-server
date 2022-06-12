@@ -10,8 +10,8 @@
 
 /**
  * Draws the status image with the ID STATUS_IMAGE_IDS[index].
- * @param display The 3-bit Inkplate display.
- * @param index the index.
+ * @param display The Inkplate display.
+ * @param index The index.
  */
 static void drawStatusImage(Inkplate* display, int index) {
     ByteArray image = createByteArray(

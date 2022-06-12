@@ -6,6 +6,7 @@
 #include "pngle.h"
 
 #include "draw_image.h"
+#include "generated.h"
 
 
 // The bytes that always appear at the beginning of a PNG file
@@ -25,7 +26,7 @@ static const char JPEG_FOOTER[] = {0xff, 0xd9};
 
 /** The drawing arguments required by drawPngDraw. */
 typedef struct {
-    // The 3-bit Inkplate display
+    // The Inkplate display
     Inkplate* display;
 
     // The x coordinate of the top-left corner at which we are rendering the
@@ -65,15 +66,21 @@ static pngle_t* drawImagePngle() {
 static void drawPngDraw(
         pngle_t* pngle, uint32_t x, uint32_t y, uint32_t width, uint32_t height,
         uint8_t rgba[4]) {
-    // Use the green component, since we're free to use any combination of the
-    // color components
     int color8 = rgba[1];
 
-    // Compute (int)((7 * color8) / 255 + 0.5) using an integer division trick
-    int color3 = (14 * color8 + 255) / (2 * 255);
+    int color;
+    #ifdef PALETTE_3_BIT_GRAYSCALE
+        // Compute (int)((7 * color8) / 255 + 0.5) using an integer division
+        // trick
+        color = (14 * color8 + 255) / (2 * 255);
+    #elif defined PALETTE_MONOCHROME
+        color = color8 >= 128 ? WHITE : BLACK;
+    #else
+        #error "Unknown palette"
+    #endif
 
     DrawPngArgs* args = (DrawPngArgs*)pngle_get_user_data(pngle);
-    args->display->drawPixel(args->x + x, args->y + y, color3);
+    args->display->drawPixel(args->x + x, args->y + y, color);
 }
 
 /** Sets "args" to contain the specified field values. */
@@ -85,7 +92,7 @@ static void setDrawPngArgs(DrawPngArgs* args, Inkplate* display, int x, int y) {
 
 /**
  * Implementation of drawImage for when the image is a PNG file.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  * @param data The contents of the PNG file.
  * @param length The number of bytes in the PNG file.
  * @param x The x coordinate of the top-left corner at which to render the

@@ -1,3 +1,4 @@
+from ..image import Palette
 from .rotation import Rotation
 from .transport import Transport
 
@@ -8,6 +9,7 @@ class ClientConfig:
 
     # Private attributes:
     #
+    # Palette _palette - The color palette to use.
     # Rotation _rotation - The rotation to use when drawing to the Inkplate
     #     device.
     # StatusImages _status_images - The status images. See the comments for
@@ -36,6 +38,7 @@ class ClientConfig:
             self._transports = transport
         self._status_images = status_images
         self._wi_fi_networks = []
+        self._palette = Palette.THREE_BIT_GRAYSCALE
         self._rotation = Rotation.LANDSCAPE
 
     def add_wi_fi_network(self, ssid, password):
@@ -51,6 +54,17 @@ class ClientConfig:
             password (str): The network's password, if any.
         """
         self._wi_fi_networks.append((ssid, password))
+
+    def set_palette(self, palette):
+        """Set the color palette to use.
+
+        The default is ``Palette.THREE_BIT_GRAYSCALE``. This must be a
+        palette that the e-ink device supports.
+
+        Arguments:
+            palette (Palette): The palette.
+        """
+        self._palette = palette
 
     def set_rotation(self, rotation):
         """Set the rotation to use when drawing to the Inkplate device.

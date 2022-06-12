@@ -51,8 +51,8 @@ class StatusImages:
     def set_image(self, name, image, quality=100):
         """Set (or add) the status image with the specified name.
 
-        We automatically convert the image to a 3-bit grayscale image
-        using ``EinkGraphics.round``.
+        We automatically reduce the image to the appropriate color
+        palette using ``EinkGraphics.round``.
 
         Arguments:
             name (str): The name of the status image.

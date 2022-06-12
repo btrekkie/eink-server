@@ -284,19 +284,20 @@ class ClientCodeGenerator:
         file.write('\n#endif\n')
 
     @staticmethod
-    def _render_status_image(image, quality):
+    def _render_status_image(image, quality, palette):
         """Render the specified status image.
 
         Arguments:
             image (image): The image.
             quality (int): The quality, as in the ``quality`` argument
                 to ``StatusImages.set_image``.
+            palette (Palette): The color palette to use.
 
         Returns:
             bytes: The contents of the image file for the image.
         """
-        image = EinkGraphics.round(image)
-        png = ImageData.render_png(image, True)
+        image = EinkGraphics.round(image, palette)
+        png = ImageData.render_png(image, palette, True)
         if quality < 100:
             jpeg = ImageData.render_jpeg(image, quality)
             if len(jpeg) < len(png):
@@ -304,7 +305,7 @@ class ClientCodeGenerator:
         return png
 
     @staticmethod
-    def _write_status_image_data_cpp(file, status_images):
+    def _write_status_image_data_cpp(file, status_images, palette):
         """Write the contents of the status_image_data.cpp file.
 
         This contains the contents and sizes of the image files for the
@@ -315,6 +316,7 @@ class ClientCodeGenerator:
             file (file): The file object to write to.
             status_images (StatusImages): The status images for the
                 program.
+            palette (Palette): The color palette to use.
         """
         ClientCodeGenerator._write_generated_message(file)
         file.write('#include "status_image_data.h"\n\n')
@@ -327,7 +329,7 @@ class ClientCodeGenerator:
         sorted_images = sorted(images, key=lambda image: image[0])
         for index, (_, image, quality) in enumerate(sorted_images):
             image_data = ClientCodeGenerator._render_status_image(
-                image, quality)
+                image, quality, palette)
             file.write('\n')
             file.write(
                 'const int STATUS_IMAGE_DATA_LENGTH{:d} = {:d};\n'.format(
@@ -368,6 +370,9 @@ class ClientCodeGenerator:
             '// The number of elements in the return value of '
             'requestTransports()\n'
             '#define TRANSPORT_COUNT {:d}\n\n'.format(len(config._transports)))
+        file.write(
+            '// The color palette to use\n'
+            '#define PALETTE_{:s}\n\n'.format(config._palette._name))
         file.write('#endif\n')
 
     @staticmethod
@@ -519,7 +524,7 @@ class ClientCodeGenerator:
         # Contains the image files for the status images
         with open(os.path.join(dir_, 'status_image_data.cpp'), 'w') as file:
             ClientCodeGenerator._write_status_image_data_cpp(
-                file, config._status_images)
+                file, config._status_images, config._palette)
 
         # #includes the header files that declare the generated constants, and
         # defines all of the constants that use #define

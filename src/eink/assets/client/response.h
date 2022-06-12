@@ -12,7 +12,7 @@
  * and display. If we detect that the response payload is not correctly
  * formatted, this has no effect.
  * @param state The client state.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  * @param reader A reader containing the response payload.
  * @return Whether we were successful, meaning we did not detect that the
  *     response payload was incorrectly formatted.

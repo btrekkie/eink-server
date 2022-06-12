@@ -11,7 +11,7 @@
  * results to the ClientState and display. In any event, this sets
  * state->requestTimeDs to the time until the next request.
  * @param state The client state.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  */
 void makeRequest(ClientState* state, Inkplate* display);
 

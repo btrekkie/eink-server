@@ -17,7 +17,7 @@ typedef enum {
 
 /**
  * Renders the status image of the specified type.
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  * @param type The type.
  */
 void drawStatusImageByType(Inkplate* display, StatusImageType type);
@@ -25,7 +25,7 @@ void drawStatusImageByType(Inkplate* display, StatusImageType type);
 /**
  * Renders the status image with the specified ID. If there is no such status
  * image, this clears the display (i.e. fills it with white).
- * @param display The 3-bit Inkplate display.
+ * @param display The Inkplate display.
  * @param imageId The image ID, as in the return value of the Python method
  *     ServerIO.image_id.
  */
