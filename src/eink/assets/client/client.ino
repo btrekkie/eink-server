@@ -14,7 +14,7 @@ ClientState clientState;
 #elif defined PALETTE_MONOCHROME
     Inkplate display(INKPLATE_1BIT);
 #else
-    #error "Unknown palette"
+    Inkplate display;
 #endif
 
 void setup() {

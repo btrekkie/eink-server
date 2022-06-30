@@ -9,7 +9,7 @@ class EinkGraphics:
     @staticmethod
     def _has_alpha(image):
         """Return whether the specified ``Image`` has an alpha channel."""
-        return image.mode[:-1] in ['A', 'a']
+        return image.mode[-1] in ['A', 'a']
 
     @staticmethod
     def _assert_doesnt_have_alpha(image):
@@ -23,14 +23,26 @@ class EinkGraphics:
         """Return the result of rounding the given image to the given palette.
 
         Return the result of rounding each pixel in the specified
-        ``Image`` to the nearest color in the specified ``Palette``.
-        This is a format suitable for display on an e-ink device. The
-        image may not have an alpha channel.
+        ``Image`` to roughly the nearest color in the specified
+        ``Palette``. This is a format suitable for display on an e-ink
+        device. The image may not have an alpha channel.
 
         This does not perform dithering. See also ``dither``.
         """
         EinkGraphics._assert_doesnt_have_alpha(image)
-        return image.convert('L').point(palette._round_lookup_table())
+        if palette._is_grayscale:
+            # First convert to grayscale, in order to apply the luminosity
+            # transform function L = 0.299 * R + 0.587 * G + 0.114 * B
+            grayscale_image = image.convert('L')
+
+            # At time of writing, the "quantize" method rounds each component
+            # down to the nearest multiple of four before rounding a pixel to
+            # the nearest palette color. We can round pixels more accurately by
+            # calling "point" instead.
+            return grayscale_image.point(palette._round_lookup_table())
+        else:
+            return image.convert('RGB').quantize(
+                dither=Image.Dither.NONE, palette=palette._image())
 
     @staticmethod
     def dither(image, palette=Palette.THREE_BIT_GRAYSCALE):
@@ -54,13 +66,9 @@ class EinkGraphics:
         icons that have large areas of solid shading.
         """
         EinkGraphics._assert_doesnt_have_alpha(image)
-
-        # First convert to grayscale, in order to apply the luminosity
-        # transform function L = 0.299 * R + 0.587 * G + 0.114 * B
-        grayscale_image = image.convert('L')
-
-        # Now convert to RGB, since the palette is RGB
-        rgb_image = grayscale_image.convert('RGB')
-
-        return rgb_image.quantize(
-            dither=Image.FLOYDSTEINBERG, palette=palette._image())
+        if palette._is_grayscale:
+            # First convert to grayscale, in order to apply the luminosity
+            # transform function L = 0.299 * R + 0.587 * G + 0.114 * B
+            image = image.convert('L')
+        return image.convert('RGB').quantize(
+            dither=Image.Dither.FLOYDSTEINBERG, palette=palette._image())

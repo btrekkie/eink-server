@@ -4,6 +4,7 @@ import json
 import os
 import urllib
 
+from eink.image import Palette
 from eink.server import Server
 from PIL import Image
 from PIL import ImageDraw
@@ -20,7 +21,7 @@ class WeatherServer(Server):
 
     def __init__(
             self, latitude, longitude, api_key, imperial=False,
-            width=800, height=600):
+            width=800, height=600, palette=Palette.THREE_BIT_GRAYSCALE):
         """Initialize a new ``WeatherServer``.
 
         Arguments:
@@ -33,6 +34,8 @@ class WeatherServer(Server):
                 imperial units, as opposed to metric units.
             width (int): The width of the display, after rotation.
             height (int): The height of the display, after rotation.
+            palette (Palette): The palette to use. This must be a
+                palette that the e-ink device supports.
         """
         self._latitude = latitude
         self._longitude = longitude
@@ -40,12 +43,16 @@ class WeatherServer(Server):
         self._imperial = imperial
         self._width = width
         self._height = height
+        self._palette = palette
 
     def update_time(self):
         return timedelta(minutes=30)
 
     def screensaver_time(self):
         return timedelta(hours=3)
+
+    def palette(self):
+        return self._palette
 
     def render(self):
         # Load the font

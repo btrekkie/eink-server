@@ -1,11 +1,12 @@
 import unittest
 
+from PIL import Image
+
 from eink.image import Palette
 from eink.image.image_data import ImageData
 from eink.server.response import Response
 from eink.server import Server
 from eink.server.server_io import ServerIO
-from PIL import Image
 
 
 class ResponseTest(unittest.TestCase):

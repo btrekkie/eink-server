@@ -2,12 +2,12 @@ from datetime import timedelta
 import io
 import unittest
 
+from PIL import Image
+
 from eink.server import Server
 from eink.server.request import Request
 from eink.server.response import Response
 from eink.server.server_io import ServerIO
-from PIL import Image
-
 from .test_server import TestServer
 
 

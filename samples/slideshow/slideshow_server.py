@@ -3,6 +3,7 @@ import os
 import random
 
 from eink.image import EinkGraphics
+from eink.image import Palette
 from eink.server import Server
 from PIL import Image
 
@@ -16,7 +17,7 @@ class SlideshowServer(Server):
 
     def __init__(
             self, image_dir, update_time=timedelta(seconds=30),
-            width=800, height=600):
+            width=800, height=600, palette=Palette.THREE_BIT_GRAYSCALE):
         """Initialize a new ``SlideshowServer``.
 
         Arguments:
@@ -26,11 +27,14 @@ class SlideshowServer(Server):
                 image.
             width (int): The width of the display, after rotation.
             height (int): The height of the display, after rotation.
+            palette (Palette): The palette to use. This must be a
+                palette that the e-ink device supports.
         """
         self._image_dir = image_dir
         self._update_time = update_time
         self._width = width
         self._height = height
+        self._palette = palette
         self._image_filenames = []
 
     def update_time(self):
@@ -38,6 +42,9 @@ class SlideshowServer(Server):
 
     def screensaver_time(self):
         return None
+
+    def palette(self):
+        return self._palette
 
     def render(self):
         if not self._image_filenames:
@@ -55,4 +62,5 @@ class SlideshowServer(Server):
         # Display the next image
         image_filename = self._image_filenames.pop()
         image = Image.open(image_filename)
-        return EinkGraphics.dither(image.resize((self._width, self._height)))
+        return EinkGraphics.dither(
+            image.resize((self._width, self._height)), self._palette)
