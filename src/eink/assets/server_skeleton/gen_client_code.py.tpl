@@ -17,7 +17,7 @@ def client_config():
         MyServer.WIDTH, MyServer.HEIGHT)
     transport = WebTransport($url)
     config = ClientConfig(transport, status_images)
-    config.add_wi_fi_network($ssid, $wi_fi_password)$set_rotation
+    config.add_wi_fi_network($ssid, $wi_fi_password)$set_rotation$set_palette
     return config
 
 

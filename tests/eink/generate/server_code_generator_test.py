@@ -69,22 +69,19 @@ class ServerCodeGeneratorTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             ServerCodeGenerator._validate_non_empty('')
 
-    def test_validate_rotation(self):
-        """Test ``ServerCodeGenerator._validate_rotation``."""
-        # Test that the following doesn't raise
-        ServerCodeGenerator._validate_rotation('1')
-        ServerCodeGenerator._validate_rotation('2')
-        ServerCodeGenerator._validate_rotation('3')
-        ServerCodeGenerator._validate_rotation('4')
-
-        with self.assertRaises(ValueError):
-            ServerCodeGenerator._validate_rotation('0')
-        with self.assertRaises(ValueError):
-            ServerCodeGenerator._validate_rotation('5')
-        with self.assertRaises(ValueError):
-            ServerCodeGenerator._validate_rotation('01')
-        with self.assertRaises(ValueError):
-            ServerCodeGenerator._validate_rotation('')
+    def test_is_positive_int(self):
+        """Test ``ServerCodeGenerator._is_positive_int``."""
+        self.assertTrue(ServerCodeGenerator._is_positive_int('1'))
+        self.assertTrue(ServerCodeGenerator._is_positive_int('12345'))
+        self.assertTrue(ServerCodeGenerator._is_positive_int('98765'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('-42'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('0'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('01'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('4.5'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('7.0'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('123abc'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int('foo'))
+        self.assertFalse(ServerCodeGenerator._is_positive_int(''))
 
     def test_validate_positive_int(self):
         """Test ``ServerCodeGenerator._validate_positive_int``."""
@@ -102,8 +99,42 @@ class ServerCodeGeneratorTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             ServerCodeGenerator._validate_positive_int('4.5')
         with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_positive_int('7.0')
+        with self.assertRaises(ValueError):
             ServerCodeGenerator._validate_positive_int('123abc')
         with self.assertRaises(ValueError):
             ServerCodeGenerator._validate_positive_int('foo')
         with self.assertRaises(ValueError):
             ServerCodeGenerator._validate_positive_int('')
+
+    def test_validate_1_to_n(self):
+        """Test ``ServerCodeGenerator._validate_1_to_n``."""
+        # Test that the following doesn't raise
+        ServerCodeGenerator._validate_1_to_n(5, '1')
+        ServerCodeGenerator._validate_1_to_n(12345, '12345')
+        ServerCodeGenerator._validate_1_to_n(1000000, '98765')
+
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(5, '6')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(5, '84')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(1, '2')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(12345, '12346')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(100, '-42')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(10, '0')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(4, '01')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(12, '4.5')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(900, '7.0')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(1000000, '123abc')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(1000, 'foo')
+        with self.assertRaises(ValueError):
+            ServerCodeGenerator._validate_1_to_n(55, '')
