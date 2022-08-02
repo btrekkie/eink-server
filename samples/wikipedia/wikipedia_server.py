@@ -1,7 +1,7 @@
+from datetime import timedelta
 import os
 import subprocess
 import tempfile
-import timedelta
 
 from eink.image import EinkGraphics
 from eink.image import Palette
@@ -58,7 +58,7 @@ class WikipediaServer(Server):
                 os.close(handle)
 
             return EinkGraphics.dither(
-                Image.open(temp_filename), self._palette)
+                Image.open(temp_filename).convert('RGB'), self._palette)
         finally:
             if os.path.isfile(temp_filename):
                 os.remove(temp_filename)
