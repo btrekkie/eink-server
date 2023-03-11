@@ -363,9 +363,10 @@ class ServerCodeGenerator:
         device = ServerCodeGenerator._input_multiple_choice(
             'Device',
             [
+                ('Inkplate 2', Device(212, 104, 'BLACK_WHITE_AND_RED')),
                 ('Inkplate 6', Device(800, 600, 'THREE_BIT_GRAYSCALE')),
-                ('Inkplate 6PLUS', Device(1024, 758, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 6COLOR', Device(600, 448, 'SEVEN_COLOR')),
+                ('Inkplate 6PLUS', Device(1024, 758, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 10', Device(1200, 825, 'THREE_BIT_GRAYSCALE')),
                 ('Other/enter parameters manually', None)],
             None)
@@ -411,6 +412,7 @@ class ServerCodeGenerator:
                 'Color palette',
                 [
                     ('3-bit grayscale', 'THREE_BIT_GRAYSCALE'),
+                    ('Black, white, and red', 'BLACK_WHITE_AND_RED'),
                     ('7-color', 'SEVEN_COLOR')],
                 0)
         return (
@@ -418,28 +420,26 @@ class ServerCodeGenerator:
             height, palette_name)
 
     @staticmethod
-    def _eval_template(server_dir, filename, params):
+    def _eval_template(template_filename, output_filename, params):
         """Evaluate a source code template.
 
         This reads the template at
-        assets/server_skeleton/[filename].tpl, performs string
+        assets/server_skeleton/[template_filename], performs string
         substitutions using ``string.Template.substitute(params)``, and
-        stores the result in [server_dir]/[filename].
+        stores the result in ``output_filename``.
 
         Arguments:
-            server_dir (str): The directory in which to store the
-                resulting file.
-            filename (str): The filename of the resulting file,
+            template_filename (str): The filename of the template file,
                 excluding the directory.
+            output_filename (str): The filename of the resulting file.
             params (dict<str, str>): The parameters to the template.
         """
         input_filename = os.path.join(
-            Project.server_skeleton_dir(), '{:s}.tpl'.format(filename))
+            Project.server_skeleton_dir(), template_filename)
         with open(input_filename, 'r') as file:
             template = file.read()
 
         contents = string.Template(template).substitute(params)
-        output_filename = os.path.join(server_dir, filename)
         with open(output_filename, 'w') as file:
             file.write(contents)
 
@@ -515,7 +515,8 @@ class ServerCodeGenerator:
             import_separator = '\n'
 
         ServerCodeGenerator._eval_template(
-            server_dir, 'gen_client_code.py', {
+            'gen_client_code.py.tpl',
+            os.path.join(server_dir, 'gen_client_code.py'), {
                 'import_json': import_json,
                 'import_os': import_os,
                 'import_rotation': import_rotation,
@@ -601,6 +602,11 @@ class ServerCodeGenerator:
         if not os.path.exists(client_dir):
             os.mkdir(client_dir)
 
+        if width >= 440 and height >= 370:
+            template_filename = 'my_server.py.tpl'
+        else:
+            template_filename = 'my_server_low_res.py.tpl'
+
         if palette_name == 'THREE_BIT_GRAYSCALE':
             import_palette = ''
             palette_constant = ''
@@ -616,21 +622,26 @@ class ServerCodeGenerator:
                 '        return MyServer.PALETTE\n')
             palette_arg = ', MyServer.PALETTE'
 
-        if palette_name == 'SEVEN_COLOR':
-            image_line_break = '\n            '
-            image_mode = "'RGB'"
-            background_color = '(255, 255, 255)'
-            header_text_color = '(67, 138, 28)'
-            body_text_color = '(0, 0, 0)'
-        else:
+        if getattr(Palette, palette_name)._is_grayscale:
             image_line_break = ''
             image_mode = "'L'"
             background_color = '255'
             header_text_color = '0'
             body_text_color = '0'
+        else:
+            image_line_break = '\n            '
+            image_mode = "'RGB'"
+            background_color = '(255, 255, 255)'
+            body_text_color = '(0, 0, 0)'
+            if palette_name == 'SEVEN_COLOR':
+                header_text_color = '(67, 138, 28)'
+            elif palette_name == 'BLACK_WHITE_AND_RED':
+                header_text_color = '(255, 0, 0)'
+            else:
+                header_text_color = '(0, 0, 0)'
 
         ServerCodeGenerator._eval_template(
-            server_dir, 'my_server.py', {
+            template_filename, os.path.join(server_dir, 'my_server.py'), {
                 'background_color': background_color,
                 'body_text_color': body_text_color,
                 'header_text_color': header_text_color,
@@ -650,7 +661,8 @@ class ServerCodeGenerator:
         else:
             path = '/'
         ServerCodeGenerator._eval_template(
-            server_dir, 'app.py', {'path': repr(path)})
+            'app.py.tpl', os.path.join(server_dir, 'app.py'),
+            {'path': repr(path)})
 
         shutil.copy(
             os.path.join(Project.server_skeleton_dir(), 'requirements.txt'),

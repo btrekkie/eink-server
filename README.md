@@ -120,8 +120,8 @@ You can use the skeleton code generator to autogenerate your own Flask server:
 * Connect your Inkplate device to your computer using a USB cable. Switch your
   e-ink display on.
 * In the Arduino IDE, click the upload button (or go to Sketch -> Upload). If
-  successful, the e-ink display should show the word "Connecting" briefly,
-  followed by the default content.
+  successful, the e-ink display should show the word "Connecting" briefly (or
+  just a wi-fi icon), followed by the default content.
 
 Once you've set up your server, take a look at the Python code it generated. Now
 you should modify it to suit your needs. (You do not need to read or modify the

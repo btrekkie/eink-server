@@ -103,7 +103,10 @@ class StatusImages:
         Returns:
             Image: The image.
         """
-        return self._default_image('connecting.png')
+        if self._width >= 320 and self._height >= 220:
+            return self._default_image('connecting.png')
+        else:
+            return self._default_image('connecting_low_res.png')
 
     def default_low_battery_image(self):
         """Return the "default" low battery image.
@@ -115,7 +118,10 @@ class StatusImages:
         Returns:
             Image: The image.
         """
-        return self._default_image('low_battery.png')
+        if self._width >= 208 and self._height >= 130:
+            return self._default_image('low_battery.png')
+        else:
+            return self._default_image('low_battery_low_res.png')
 
     @staticmethod
     def create_default(width, height):

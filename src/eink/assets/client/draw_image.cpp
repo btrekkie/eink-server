@@ -1,6 +1,6 @@
 #include <string.h>
 
-#ifdef PALETTE_7_COLOR
+#if defined PALETTE_7_COLOR || defined PALETTE_BLACK_WHITE_AND_RED
     #include "Inkplate.h"
 #endif
 // It's improper to rely on the Pngle library, because it's not part of the
@@ -104,6 +104,20 @@ static void drawPngDraw(
     #elif defined PALETTE_MONOCHROME
         int color1000 = 299 * red + 587 * green + 114 * blue;
         color = color1000 >= 255 * 1000 / 2 ? WHITE : BLACK;
+    #elif defined PALETTE_BLACK_WHITE_AND_RED
+        if (red >= 128) {
+            if (blue + green < 255) {
+                color = RED;
+            } else {
+                color = WHITE;
+            }
+        } else if (red * red + green * green + blue * blue <
+                (255 - red) * (255 - red) + (255 - green) * (255 - green) +
+                (255 - blue) * (255 - blue)) {
+            color = BLACK;
+        } else {
+            color = WHITE;
+        }
     #else
         int bestIndex = 0;
         int bestDistance = 1000000000;
