@@ -107,16 +107,16 @@ static void drawPngDraw(
     #elif defined PALETTE_BLACK_WHITE_AND_RED
         if (red >= 128) {
             if (blue + green < 255) {
-                color = RED;
+                color = INKPLATE2_RED;
             } else {
-                color = WHITE;
+                color = INKPLATE2_WHITE;
             }
         } else if (red * red + green * green + blue * blue <
                 (255 - red) * (255 - red) + (255 - green) * (255 - green) +
                 (255 - blue) * (255 - blue)) {
-            color = BLACK;
+            color = INKPLATE2_BLACK;
         } else {
-            color = WHITE;
+            color = INKPLATE2_WHITE;
         }
     #else
         int bestIndex = 0;
