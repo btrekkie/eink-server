@@ -364,6 +364,9 @@ class ServerCodeGenerator:
             'Device',
             [
                 ('Inkplate 2', Device(212, 104, 'BLACK_WHITE_AND_RED')),
+                (
+                    'Inkplate 4 TEMPERA',
+                    Device(600, 600, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 5', Device(960, 540, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 6', Device(800, 600, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 6COLOR', Device(600, 448, 'SEVEN_COLOR')),
