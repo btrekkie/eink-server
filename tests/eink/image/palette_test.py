@@ -1,7 +1,5 @@
 import unittest
 
-from PIL import Image
-
 from eink.image import Palette
 
 
@@ -11,6 +9,7 @@ class PaletteTest(unittest.TestCase):
     def test_is_grayscale(self):
         """Test ``Palette._is_grayscale``."""
         self.assertTrue(Palette.THREE_BIT_GRAYSCALE._is_grayscale)
+        self.assertTrue(Palette.FOUR_BIT_GRAYSCALE._is_grayscale)
         self.assertTrue(Palette.MONOCHROME._is_grayscale)
         self.assertFalse(Palette.BLACK_WHITE_AND_RED._is_grayscale)
         self.assertFalse(Palette.SEVEN_COLOR._is_grayscale)

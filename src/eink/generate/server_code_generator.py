@@ -370,6 +370,7 @@ class ServerCodeGenerator:
                 ('Inkplate 5', Device(960, 540, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 6', Device(800, 600, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 6COLOR', Device(600, 448, 'SEVEN_COLOR')),
+                ('Inkplate 6MOTION', Device(1024, 758, 'FOUR_BIT_GRAYSCALE')),
                 ('Inkplate 6PLUS', Device(1024, 758, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 10', Device(1200, 825, 'THREE_BIT_GRAYSCALE')),
                 ('Other/enter parameters manually', None)],
@@ -416,6 +417,7 @@ class ServerCodeGenerator:
                 'Color palette',
                 [
                     ('3-bit grayscale', 'THREE_BIT_GRAYSCALE'),
+                    ('4-bit grayscale', 'FOUR_BIT_GRAYSCALE'),
                     ('Black, white, and red', 'BLACK_WHITE_AND_RED'),
                     ('7-color', 'SEVEN_COLOR')],
                 0)

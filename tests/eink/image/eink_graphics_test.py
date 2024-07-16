@@ -92,6 +92,7 @@ class EinkGraphicsTest(unittest.TestCase):
     def test_round(self):
         """Test ``EinkGraphics.round``."""
         self._check_round(Palette.THREE_BIT_GRAYSCALE)
+        self._check_round(Palette.FOUR_BIT_GRAYSCALE)
         self._check_round(Palette.MONOCHROME)
         self._check_round(Palette.SEVEN_COLOR)
 
@@ -171,20 +172,36 @@ class EinkGraphicsTest(unittest.TestCase):
     def test_dither(self):
         """Test ``EinkGraphics.dither``."""
         self._check_dither(Palette.THREE_BIT_GRAYSCALE)
+        self._check_dither(Palette.FOUR_BIT_GRAYSCALE)
         self._check_dither(Palette.MONOCHROME)
         self._check_dither(Palette.SEVEN_COLOR)
 
-    def test_dither_grayscale(self):
-        """Test ``EinkGraphics.dither`` with ``Palette.THREE_BIT_GRAYSCALE``.
+    def _check_dither_grayscale(self, palette, color1, color2):
+        """Test ``EinkGraphics.dither`` with a grayscale ``Palette``.
+
+        This tests that when we dither an image that contains pixels
+        with luminosity between the specified values, the result only
+        has those two colors. The colors must be adjacent colors in the
+        palette.
+
+        Arguments:
+            palette (Palette): The grayscale palette to test.
+            color1 (int): The lower luminosity value, in the range ``[0,
+                255]``.
+            color2 (int): The higher luminosity value, in the range
+                ``[0, 255]``.
         """
-        # Test an image that only contains pixels with luminosity between 1/7
-        # and 2/7
         rng = random.Random(-1287208726)
-        pixels = list([rng.randrange(36, 74) for i in range(400)])
+        pixels = list([rng.randrange(color1, color2 + 1) for i in range(400)])
         image = Image.new('L', (20, 20))
         image.putdata(pixels)
-        result = EinkGraphics.dither(image)
+        result = EinkGraphics.dither(image, palette)
         self.assertEqual(image.size, result.size)
         self.assertFalse(EinkGraphics._has_alpha(result))
         self.assertTrue(
-            self._are_pixels_in(result.convert('L'), set([36, 73])))
+            self._are_pixels_in(result.convert('L'), set([color1, color2])))
+
+    def test_dither_grayscale(self):
+        """Test ``EinkGraphics.dither`` with grayscale ``Palettes``."""
+        self._check_dither_grayscale(Palette.THREE_BIT_GRAYSCALE, 36, 73)
+        self._check_dither_grayscale(Palette.FOUR_BIT_GRAYSCALE, 136, 153)

@@ -8,6 +8,8 @@ class Palette:
 
     * ``Palette.THREE_BIT_GRAYSCALE``: 3-bit grayscale, i.e. eight
       shades of gray.
+    * ``Palette.FOUR_BIT_GRAYSCALE``: 4-bit grayscale, i.e. 16
+      shades of gray.
     * ``Palette.MONOCHROME``: Black and white.
     * ``Palette.BLACK_WHITE_AND_RED``: Black, white, and red.
     * ``Palette.SEVEN_COLOR``: The palette for color Inkplate devices.
@@ -80,10 +82,9 @@ class Palette:
 
 
 Palette.THREE_BIT_GRAYSCALE = Palette(
-    [
-        (0, 0, 0), (36, 36, 36), (73, 73, 73), (109, 109, 109),
-        (146, 146, 146), (182, 182, 182), (219, 219, 219), (255, 255, 255)],
-    '3_BIT_GRAYSCALE')
+    [(round(255 * color / 7),) * 3 for color in range(8)], '3_BIT_GRAYSCALE')
+Palette.FOUR_BIT_GRAYSCALE = Palette(
+    [(round(255 * color / 15),) * 3 for color in range(16)], '4_BIT_GRAYSCALE')
 Palette.MONOCHROME = Palette([(0, 0, 0), (255, 255, 255)], 'MONOCHROME')
 Palette.BLACK_WHITE_AND_RED = Palette(
     [(0, 0, 0), (255, 255, 255), (255, 0, 0)], 'BLACK_WHITE_AND_RED')

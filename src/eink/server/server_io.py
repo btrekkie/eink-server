@@ -20,7 +20,7 @@ class ServerIO:
     # change the version.
     PROTOCOL_VERSION = b'2021-02-27T23:07:41Z'
 
-    # The length of the return value of ``image_id()``
+    # The length of the return value of image_id()
     STATUS_IMAGE_ID_LENGTH = 32
 
     @staticmethod

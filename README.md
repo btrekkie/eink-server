@@ -48,7 +48,7 @@ You can use the skeleton code generator to autogenerate your own Flask server:
   ```
 
 * Set up the Arduino IDE to work with the Inkplate device:
-  <https://e-radionica.com/en/blog/add-inkplate-6-to-arduino-ide/>.
+  <https://soldered.com/learn/add-inkplate-6-board-definition-to-arduino-ide/>.
 * Obtain a fixed IP address or domain name for your PC. There are three options:
     * (recommended) Assign your computer a static local IP address (such as
       192.168.1.70), using your Wi-Fi modem/router's settings. If you do this,

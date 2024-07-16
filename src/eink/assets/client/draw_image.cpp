@@ -96,14 +96,20 @@ static void drawPngDraw(
     int blue = rgba[2];
 
     int color;
-    #ifdef PALETTE_3_BIT_GRAYSCALE
+    #if defined PALETTE_MONOCHROME || defined PALETTE_3_BIT_GRAYSCALE || defined PALETTE_4_BIT_GRAYSCALE
         // Compute (int)(7 * (0.299 * red + 0.587 * green + 0.114 * blue) / 255
         // + 0.5)
         int color1000 = 299 * red + 587 * green + 114 * blue;
-        color = (7 * color1000 + 255 * 1000 / 2) / (255 * 1000);
-    #elif defined PALETTE_MONOCHROME
-        int color1000 = 299 * red + 587 * green + 114 * blue;
-        color = color1000 >= 255 * 1000 / 2 ? WHITE : BLACK;
+        #ifdef PALETTE_MONOCHROME
+            color = color1000 >= 255 * 1000 / 2 ? WHITE : BLACK;
+        #else
+            #ifdef PALETTE_3_BIT_GRAYSCALE
+                int COLOR_MAX = 7;
+            #else
+                int COLOR_MAX = 15;
+            #endif
+            color = (COLOR_MAX * color1000 + 255 * 1000 / 2) / (255 * 1000);
+        #endif
     #elif defined PALETTE_BLACK_WHITE_AND_RED
         if (red >= 128) {
             if (blue + green < 255) {

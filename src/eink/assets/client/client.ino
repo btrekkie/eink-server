@@ -11,6 +11,8 @@ ClientState clientState;
 // The Inkplate object for the program
 #ifdef PALETTE_3_BIT_GRAYSCALE
     Inkplate display(INKPLATE_3BIT);
+#elif defined PALETTE_4_BIT_GRAYSCALE
+    Inkplate display(INKPLATE_4BIT);
 #elif defined PALETTE_MONOCHROME
     Inkplate display(INKPLATE_1BIT);
 #else
