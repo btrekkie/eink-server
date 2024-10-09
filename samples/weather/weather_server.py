@@ -87,7 +87,7 @@ class WeatherServer(Server):
 
             high = round(day_forecast['temp']['max'])
             low = round(day_forecast['temp']['min'])
-            text = '{:s}: {:d}\u00b0 / {:d}\u00b0'.format(day_str, high, low)
+            text = f'{day_str}: {high}\u00b0 / {low}\u00b0'
             draw.text((x, y), text, fill=0, font=font)
             y += 70
         return image
@@ -102,10 +102,10 @@ class WeatherServer(Server):
         else:
             units = 'metric'
         url = (
-            'https://api.openweathermap.org/data/2.5/onecall?'
-            'exclude=current,minutely,hourly,alerts&'
-            'units={:s}&appid={:s}&lat={:s}&lon={:s}').format(
-            units, self._api_key, str(self._latitude), str(self._longitude))
+            'https://api.openweathermap.org/data/3.0/onecall?'
+            f'exclude=current,minutely,hourly,alerts&units={units}&'
+            f'appid={self._api_key}&lat={self._latitude}&'
+            f'lon={self._longitude}')
 
         with urllib.request.urlopen(url) as response:
             return json.loads(response.read().decode())
