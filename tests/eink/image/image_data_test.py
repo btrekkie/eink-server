@@ -32,8 +32,8 @@ class ImageDataTest(unittest.TestCase):
         self.assertEqual(image.size, result.size)
         self.assertFalse(EinkGraphics._has_alpha(result))
         self.assertEqual(
-            list(image.convert('RGB').getdata()),
-            list(result.convert('RGB').getdata()))
+            list(image.convert('RGB').get_flattened_data()),
+            list(result.convert('RGB').get_flattened_data()))
 
     def _check_render_png(self, palette):
         """Test ``ImageData.render_png`` with the specified ``Palette``."""

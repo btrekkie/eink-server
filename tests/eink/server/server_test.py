@@ -79,7 +79,7 @@ class ServerTest(unittest.TestCase):
         response2 = Response.create_from_bytes(server2.exec(request_bytes))
         response_image = Image.open(io.BytesIO(response2.image_data))
         self.assertEqual(
-            [73] * 400, list(response_image.convert('L').getdata()))
+            [73] * 400, list(response_image.convert('L').get_flattened_data()))
         self.assertTrue(
             self._are_request_times_equal(
                 [Server._INT_MAX], response2.request_times_ds))

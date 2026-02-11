@@ -38,7 +38,7 @@ class EinkGraphicsTest(unittest.TestCase):
         return image
 
     def _are_pixels_in(self, image, values):
-        """Return whether all pixels in ``image.getdata()`` are in ``values``.
+        """Return whether all pixels in ``image`` are in ``values``.
 
         Arguments:
             image (Image): The image.
@@ -47,7 +47,7 @@ class EinkGraphicsTest(unittest.TestCase):
         Return:
             bool: The result.
         """
-        for pixel in image.getdata():
+        for pixel in image.get_flattened_data():
             if pixel not in values:
                 return False
         return True
@@ -72,7 +72,7 @@ class EinkGraphicsTest(unittest.TestCase):
         result1 = EinkGraphics.round(image1, palette)
         self.assertEqual(image1.size, result1.size)
         self.assertFalse(EinkGraphics._has_alpha(result1))
-        actual_pixels = result1.convert('RGB').getdata()
+        actual_pixels = result1.convert('RGB').get_flattened_data()
         self.assertEqual(expected_pixels, list(actual_pixels))
 
         image2 = self._random_image()
@@ -121,7 +121,7 @@ class EinkGraphicsTest(unittest.TestCase):
             [[73, 109]] + ([[109]] * 36) + ([[146]] * 36) + [[146, 182]] +
             ([[182]] * 36) + ([[219]] * 36) + [[219, 255]] + ([[255]] * 18))
         self._check_pixels(
-            expected_pixels, list(result1.convert('L').getdata()))
+            expected_pixels, list(result1.convert('L').get_flattened_data()))
 
         pixels2 = list([(i, i, i) for i in range(256)])
         image2 = Image.new('RGB', (16, 16))
@@ -130,7 +130,7 @@ class EinkGraphicsTest(unittest.TestCase):
         self.assertEqual(image2.size, result2.size)
         self.assertFalse(EinkGraphics._has_alpha(result2))
         self._check_pixels(
-            expected_pixels, list(result2.convert('L').getdata()))
+            expected_pixels, list(result2.convert('L').get_flattened_data()))
 
     def test_round_monochrome(self):
         """Test ``EinkGraphics.round`` with ``Palette.MONOCHROME``."""
@@ -142,7 +142,7 @@ class EinkGraphicsTest(unittest.TestCase):
         self.assertFalse(EinkGraphics._has_alpha(result1))
         expected_pixels = ([0] * 128) + ([255] * 128)
         self.assertEqual(
-            expected_pixels, list(result1.convert('L').getdata()))
+            expected_pixels, list(result1.convert('L').get_flattened_data()))
 
         pixels2 = list([(i, i, i) for i in range(256)])
         image2 = Image.new('RGB', (16, 16))
@@ -151,7 +151,7 @@ class EinkGraphicsTest(unittest.TestCase):
         self.assertEqual(image2.size, result2.size)
         self.assertFalse(EinkGraphics._has_alpha(result2))
         self.assertEqual(
-            expected_pixels, list(result2.convert('L').getdata()))
+            expected_pixels, list(result2.convert('L').get_flattened_data()))
 
     def _check_dither(self, palette):
         """Test ``EinkGraphics.dither`` with the specified ``Palette``."""
