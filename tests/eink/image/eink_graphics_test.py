@@ -94,6 +94,7 @@ class EinkGraphicsTest(unittest.TestCase):
         self._check_round(Palette.THREE_BIT_GRAYSCALE)
         self._check_round(Palette.FOUR_BIT_GRAYSCALE)
         self._check_round(Palette.MONOCHROME)
+        self._check_round(Palette.SIX_COLOR)
         self._check_round(Palette.SEVEN_COLOR)
 
     def _check_pixels(self, expected_pixels, actual_pixels):
@@ -174,6 +175,7 @@ class EinkGraphicsTest(unittest.TestCase):
         self._check_dither(Palette.THREE_BIT_GRAYSCALE)
         self._check_dither(Palette.FOUR_BIT_GRAYSCALE)
         self._check_dither(Palette.MONOCHROME)
+        self._check_dither(Palette.SIX_COLOR)
         self._check_dither(Palette.SEVEN_COLOR)
 
     def _check_dither_grayscale(self, palette, color1, color2):

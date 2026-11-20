@@ -12,7 +12,10 @@ class Palette:
       shades of gray.
     * ``Palette.MONOCHROME``: Black and white.
     * ``Palette.BLACK_WHITE_AND_RED``: Black, white, and red.
-    * ``Palette.SEVEN_COLOR``: The palette for color Inkplate devices.
+    * ``Palette.SIX_COLOR``: The palette for 13SPECTRA Inkplate devices.
+      This has the following six colors: black, white, red, green, blue,
+      and yellow.
+    * ``Palette.SEVEN_COLOR``: The palette for 6COLOR Inkplate devices.
       This has the following seven colors: black, white, red, green,
       blue, yellow, and orange.
     """
@@ -93,3 +96,8 @@ Palette.SEVEN_COLOR = Palette(
         (0, 0, 0), (255, 255, 255), (67, 138, 28), (85, 94, 126),
         (138, 76, 91), (255, 243, 56), (232, 126, 0)],
     '7_COLOR')
+Palette.SIX_COLOR = Palette(
+    [
+        (0, 0, 0), (255, 255, 255), (255, 255, 0), (255, 0, 0), (0, 0, 255),
+        (0, 128, 0)],
+    '6_COLOR')

@@ -375,6 +375,7 @@ class ServerCodeGenerator:
                 ('Inkplate 6MOTION', Device(1024, 758, 'FOUR_BIT_GRAYSCALE')),
                 ('Inkplate 6PLUS', Device(1024, 758, 'THREE_BIT_GRAYSCALE')),
                 ('Inkplate 10', Device(1200, 825, 'THREE_BIT_GRAYSCALE')),
+                ('Inkplate 13SPECTRA', Device(1600, 1200, 'SIX_COLOR')),
                 ('Other/enter parameters manually', None)],
             None)
         rotation = ServerCodeGenerator._input_multiple_choice(
@@ -421,6 +422,7 @@ class ServerCodeGenerator:
                     ('3-bit grayscale', 'THREE_BIT_GRAYSCALE'),
                     ('4-bit grayscale', 'FOUR_BIT_GRAYSCALE'),
                     ('Black, white, and red', 'BLACK_WHITE_AND_RED'),
+                    ('6-color', 'SIX_COLOR'),
                     ('7-color', 'SEVEN_COLOR')],
                 0)
         return (

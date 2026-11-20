@@ -60,4 +60,5 @@ class ImageDataTest(unittest.TestCase):
         self._check_render_png(Palette.THREE_BIT_GRAYSCALE)
         self._check_render_png(Palette.FOUR_BIT_GRAYSCALE)
         self._check_render_png(Palette.MONOCHROME)
+        self._check_render_png(Palette.SIX_COLOR)
         self._check_render_png(Palette.SEVEN_COLOR)

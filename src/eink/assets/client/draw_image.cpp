@@ -1,6 +1,6 @@
 #include <string.h>
 
-#if defined PALETTE_7_COLOR || defined PALETTE_BLACK_WHITE_AND_RED
+#if defined PALETTE_6_COLOR || defined PALETTE_7_COLOR || defined PALETTE_BLACK_WHITE_AND_RED
     #include "Inkplate.h"
 #endif
 // It's improper to rely on the Pngle library, because it's not part of the
@@ -26,12 +26,30 @@ static const char JPEG_FOOTER[] = {0xff, 0xd9};
 // file
 #define READ_PNG_BUFFER_SIZE 4096
 
-#ifdef PALETTE_7_COLOR
+#if defined PALETTE_6_COLOR
     // The number of colors in the palette
-    const int PALETTE_COLOR_COUNT = 7;
+    const int PALETTE_COLOR_COUNT = 6;
 
     // The colors in the palette. Each color is represented as a sequence of its
     // red, green, and blue components.
+    const int PALETTE_COLORS[] = {
+        0, 0, 0,
+        255, 255, 255,
+        255, 255, 0,
+        255, 0, 0,
+        0, 0, 255,
+        0, 128, 0};
+
+    // The colors in the palette, as represented in Inkplate.drawPixel and the
+    // like. The colors are in the same order as in PALETTE_COLORS.
+    const int INKPLATE_COLORS[] = {
+        INKPLATE_BLACK, INKPLATE_WHITE, INKPLATE_YELLOW, INKPLATE_RED,
+        INKPLATE_BLUE, INKPLATE_GREEN};
+
+#elif defined PALETTE_7_COLOR
+
+    const int PALETTE_COLOR_COUNT = 7;
+
     const int PALETTE_COLORS[] = {
         0, 0, 0,
         255, 255, 255,
@@ -41,8 +59,6 @@ static const char JPEG_FOOTER[] = {0xff, 0xd9};
         255, 243, 56,
         232, 126, 0};
 
-    // The colors in the palette, as represented in Inkplate.drawPixel and the
-    // like. The colors are in the same order as in PALETTE_COLORS.
     const int INKPLATE_COLORS[] = {
         INKPLATE_BLACK, INKPLATE_WHITE, INKPLATE_GREEN, INKPLATE_BLUE,
         INKPLATE_RED, INKPLATE_YELLOW, INKPLATE_ORANGE};
